@@ -22,6 +22,8 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -244,8 +246,8 @@ public class ObjectRenderer {
         scaleMatrix[0] = scaleFactor;
         scaleMatrix[5] = scaleFactor;
         scaleMatrix[10] = scaleFactor;
-        rotate(modelMatrix,rotationCoef*360);
-        translate(modelMatrix,verticalDist);
+        translate(modelMatrix,verticalDist,modelMatrix[12],modelMatrix[13],modelMatrix[14]);
+        rotate(modelMatrix,-rotationCoef*360);
         Matrix.multiplyMM(mModelMatrix, 0, modelMatrix, 0, scaleMatrix, 0);
     }
 
@@ -253,8 +255,9 @@ public class ObjectRenderer {
         Matrix.rotateM(mModelMatrix, 0, mAngle, 0.0f, 1.0f, 0.0f);
     }
 
-    public void translate(float[] mModelMatrix, float distY) {
-        Matrix.translateM(mModelMatrix,0,0,distY,0);
+    public void translate(float[] mModelMatrix, float distY,float x, float y, float z) {
+        Log.d("Dist","y: " + distY);
+        Matrix.translateM(mModelMatrix,0,x,y+distY,z);
     }
 
     /**
