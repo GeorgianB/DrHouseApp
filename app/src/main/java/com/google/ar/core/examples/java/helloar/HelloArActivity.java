@@ -84,6 +84,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     private float mScaleFactor = 1.f;
     private float mScrollCoef = 0.f;
     private float mRotateSpeed = 5.f;
+    private float mTranslateSpeed = 1200.f;
     private float mVerticalDist = 0.f;
     private Config mDefaultConfig;
     private Session mSession;
@@ -285,14 +286,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     }
 
     private void translateObject(float distY) {
-        mVerticalDist += distY;
-    }
-
-    private void detectObject(MotionEvent e) {
-        float x = e.getX();
-        float y = e.getY();
-
-        Log.d("tap","double tap x: " + x + ",y: " + y);
+        mVerticalDist += distY/mTranslateSpeed;
     }
 
     private void onSingleTap(MotionEvent e) {
