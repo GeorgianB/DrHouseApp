@@ -61,6 +61,7 @@
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:id="@+id/checkBoxLabel"
             android:typeface="monospace" />
         <CheckBox
             android:id="@+id/checkBox"
