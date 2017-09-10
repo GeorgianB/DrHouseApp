@@ -52,26 +52,26 @@ public class CustomAdapter extends ArrayAdapter<Product> {
         ViewHolder viewHolder; // view lookup cache stored in tag
 
         final View result;
+        viewHolder = new ViewHolder();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        convertView = inflater.inflate(R.layout.row, parent, false);
+        viewHolder.name = (TextView) convertView.findViewById(R.id.productName);
+        viewHolder.price = (TextView) convertView.findViewById(R.id.productPrice);
+        viewHolder.imageView = (ImageView) convertView.findViewById(R.id.productImage);
+        viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
+        viewHolder.checkBoxLabel = (TextView) convertView.findViewById(R.id.checkBoxLabel);
 
-        if (convertView == null) {
-
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row, parent, false);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.productName);
-            viewHolder.price = (TextView) convertView.findViewById(R.id.productPrice);
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.productImage);
-            viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
-            viewHolder.checkBoxLabel = (TextView) convertView.findViewById(R.id.checkBoxLabel);
-
-            result = convertView;
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
+        result = convertView;
+        if (!dataModel.getArCompatible()) {
+            viewHolder.checkbox.setVisibility(View.INVISIBLE);
+            viewHolder.checkBoxLabel.setVisibility(View.INVISIBLE);
         }
+        convertView.setTag(viewHolder);
+
         convertView.setId(dataModel.getId());
+        if (selectedProducts.indexOf(dataModel) != -1) {
+            viewHolder.checkbox.setChecked(true);
+        }
         viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -95,13 +95,8 @@ public class CustomAdapter extends ArrayAdapter<Product> {
         viewHolder.name.setText(dataModel.getName());
         viewHolder.price.setText(String.valueOf(dataModel.getPrice()));
         viewHolder.imageView.setImageBitmap(this.getBitmapFromURL(dataModel.getImage()));
-        viewHolder.checkbox.setId(dataModel.getId());
-        if(!dataModel.getArCompatible()){
-            viewHolder.checkbox.setVisibility(View.INVISIBLE);
-            viewHolder.checkBoxLabel.setVisibility(View.INVISIBLE);
-        }
         // Return the completed view to render on screen
-        return convertView;
+        return result;
     }
 
     private Bitmap getBitmapFromURL(String src) {
