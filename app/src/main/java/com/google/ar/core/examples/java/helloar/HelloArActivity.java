@@ -23,6 +23,7 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PlaneHitResult;
 import com.google.ar.core.Session;
+import com.google.ar.core.examples.java.helloar.entity.Product;
 import com.google.ar.core.examples.java.helloar.rendering.BackgroundRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer.BlendMode;
@@ -32,7 +33,6 @@ import com.google.ar.core.examples.java.helloar.rendering.PointCloudRenderer;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.opengl.GLES20;
@@ -55,14 +55,23 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.os.Environment;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -87,6 +96,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     private GestureDetector mGestureDetector;
     private ScaleGestureDetector mScaleDetector;
     private Snackbar mLoadingMessageSnackbar = null;
+    private String mObjectFile;
 
     private ObjectRenderer mVirtualObject = new ObjectRenderer();
     private ObjectRenderer mVirtualObjectShadow = new ObjectRenderer();
@@ -115,13 +125,21 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(R.layout.activity_main);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceview);
 
         mSession = new Session(/*context=*/this);
+        /**
+         * cod de preluat produse
+         */
+        System.out.println("#########Inceput output buton in HelloAr");
+        for (Product c : MainActivity.adapter.selectedProducts) {
+            System.out.println(c.getName());
+        }
 
+        /**
+         * cod de preluat produse
+         */
         // Create default config, check is supported, create session from that config.
         mDefaultConfig = Config.createDefaultConfig();
         if (!mSession.isSupported(mDefaultConfig)) {
@@ -230,13 +248,14 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
 
         // ARCore requires camera permissions to operate. If we did not yet obtain runtime
         // permission on Android M and above, now is a good time to ask the user for it.
-        if (CameraPermissionHelper.hasCameraPermission(this)) {
+        if (CameraPermissionHelper.hasCameraPermission(this) && InternetPermissionHelper.hasInternetPermission(this)) {
             showLoadingMessage();
             // Note that order matters - see the note in onPause(), the reverse applies here.
             mSession.resume(mDefaultConfig);
             mSurfaceView.onResume();
         } else {
             CameraPermissionHelper.requestCameraPermission(this);
+            InternetPermissionHelper.requestInternetPermission(this);
         }
     }
 
@@ -255,6 +274,11 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         if (!CameraPermissionHelper.hasCameraPermission(this)) {
             Toast.makeText(this,
                 "Camera permission is needed to run this application", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        if (!InternetPermissionHelper.hasInternetPermission(this)) {
+            Toast.makeText(this,
+                    "Internet permission is needed to run this application", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -293,22 +317,32 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
 
         // Prepare the other rendering objects.
         try {
-            mVirtualObject.createOnGlThread(/*context=*/this, "andy.obj", "andy.png");
-            mVirtualObject.setMaterialProperties(0.0f, 3.5f, 1.0f, 6.0f);
-
-            mVirtualObjectShadow.createOnGlThread(/*context=*/this,
-                "andy_shadow.obj", "andy_shadow.png");
-            mVirtualObjectShadow.setBlendMode(BlendMode.Shadow);
-            mVirtualObjectShadow.setMaterialProperties(1.0f, 0.0f, 0.0f, 1.0f);
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to read obj file");
-        }
-        try {
             mPlaneRenderer.createOnGlThread(/*context=*/this, "trigrid.png");
         } catch (IOException e) {
             Log.e(TAG, "Failed to read plane texture");
         }
         mPointCloud.createOnGlThread(/*context=*/this);
+    }
+
+    /**
+     *
+     * @param objectName
+     * @param Texture
+     */
+    public void createObject(String objectName,String Texture) {
+        Log.d("Object name: ", objectName);
+        Log.d("Object texture: ", Texture);
+        try {
+            mVirtualObject.createOnGlThread(/*context=*/this, objectName, Texture);
+            mVirtualObject.setMaterialProperties(0.0f, 3.5f, 1.0f, 6.0f);
+
+            mVirtualObjectShadow.createOnGlThread(/*context=*/this,
+                    "andy_shadow.obj", "andy_shadow.png");
+            mVirtualObjectShadow.setBlendMode(BlendMode.Shadow);
+            mVirtualObjectShadow.setMaterialProperties(1.0f, 0.0f, 0.0f, 1.0f);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to read obj file");
+        }
     }
 
     @Override
@@ -451,7 +485,8 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
             case R.id.action_websearch:
                 // create intent to perform web search for this planet
                 Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                intent.putExtra(SearchManager.QUERY, getSupportActionBar().getTitle());
+                String url = intent.getExtras().getString("url");
+                Log.d("url", url);
                 // catch event that there's no activity to handle intent
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
@@ -470,7 +505,9 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         Bundle args = new Bundle();
         args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
         fragment.setArguments(args);
-
+        if(position == 0) {
+            createObject("kitchen.electric_oven-obj.untitled.obj","kitchen.electric_oven-obj.untitled.mtl");
+        }
         FragmentManager fragmentManager = getFragmentManager();
         //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
