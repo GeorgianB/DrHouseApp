@@ -17,7 +17,7 @@
 <resources>
     <string name="app_name">HelloAR Java</string>
     <string-array name="planets_array">
-        <item>Mercury</item>
+        <item>Masina de spalat</item>
         <item>Venus</item>
         <item>Earth</item>
         <item>Mars</item>
