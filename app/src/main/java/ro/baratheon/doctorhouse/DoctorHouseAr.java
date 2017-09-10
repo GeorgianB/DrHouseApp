@@ -93,6 +93,9 @@ public class DoctorHouseAr extends AppCompatActivity implements GLSurfaceView.Re
     // Temporary matrix allocated here to reduce number of allocations for each frame.
     private final float[] mAnchorMatrix = new float[16];
 
+    //List of objects already added to world
+    private String[] mWorldObjects;
+
     // Tap handling and UI.
     private ArrayBlockingQueue<MotionEvent> mQueuedSingleTaps = new ArrayBlockingQueue<>(16);
     private ArrayList<PlaneAttachment> mTouches = new ArrayList<>();
