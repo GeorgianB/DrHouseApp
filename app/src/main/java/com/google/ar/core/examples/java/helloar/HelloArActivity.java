@@ -55,20 +55,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.os.Environment;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL;
@@ -318,6 +310,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSession.setCameraTextureName(mBackgroundRenderer.getTextureId());
 
         // Prepare the other rendering objects.
+        createObject("electric-oven.obj", "microwave.jpg");
         try {
             mPlaneRenderer.createOnGlThread(/*context=*/this, "trigrid.png");
         } catch (IOException e) {
@@ -332,8 +325,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
      * @param Texture
      */
     public void createObject(String objectName,String Texture) {
-        Log.d("Object name: ", objectName);
-        Log.d("Object texture: ", Texture);
         try {
             mVirtualObject.createOnGlThread(/*context=*/this, objectName, Texture);
             mVirtualObject.setMaterialProperties(0.0f, 3.5f, 1.0f, 6.0f);
@@ -502,10 +493,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     }
 
     public void selectItem(int position) {
-        if(position == 0) {
-            createObject("kitchen.electric_oven-obj.untitled.obj","kitchen.electric_oven-obj.untitled.mtl");
-        }
-
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(MainActivity.adapter.selectedProducts.get(position).getName());
