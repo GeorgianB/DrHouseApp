@@ -1,7 +1,10 @@
 package com.google.ar.core.examples.java.helloar.adapter;
 
+import com.google.ar.core.examples.java.helloar.entity.Category;
 import com.google.ar.core.examples.java.helloar.entity.Product;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -19,10 +22,33 @@ public class Api {
 
     public ArrayList<Product> getProducts() {
         try {
+            ArrayList<Product> list = new ArrayList<Product>();
             URL url = new URL(this.endPoint);
             InputStreamReader reader = new InputStreamReader(url.openStream());
-            ArrayList<Product> list = new Gson().fromJson(reader, new TypeToken<ArrayList<Product>>() {
+            ArrayList<JsonObject> jsonObjects = new Gson().fromJson(reader, new TypeToken<ArrayList<JsonObject>>() {
             }.getType());
+            for (JsonObject jsonObject : jsonObjects) {
+                JsonObject category = jsonObject.getAsJsonObject("category");
+                JsonElement modelObject = jsonObject.get("model_object");
+                JsonElement modelTexture = jsonObject.get("model_texture");
+
+                list.add(
+                        new Product(
+                                jsonObject.get("id").getAsInt(),
+                                jsonObject.get("name").getAsString(),
+                                jsonObject.get("price").getAsDouble(),
+                                jsonObject.get("description").getAsString(),
+                                new Category(
+                                        category.get("id").getAsInt(),
+                                        category.get("name").getAsString()
+                                ),
+                                jsonObject.get("image").getAsString(),
+                                modelObject != null ? modelObject.getAsString() : "",
+                                modelTexture != null ? modelTexture.getAsString() : "",
+                                jsonObject.get("is_ar_compatible").getAsBoolean()
+                        )
+                );
+            }
             return list;
         } catch (MalformedURLException e) {
             e.printStackTrace();

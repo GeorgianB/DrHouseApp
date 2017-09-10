@@ -1,7 +1,5 @@
 package com.google.ar.core.examples.java.helloar.entity;
 
-import java.util.HashMap;
-
 public class Product {
     private Integer id;
     private String name;
@@ -9,8 +7,24 @@ public class Product {
     private Category category;
     private Double price;
     private String image;
+    private String modelObject;
+    private String modelTexture;
+    private Boolean isArCompatible = false;
     private Boolean selected = false;
-    public static HashMap<Integer, Product> selectedProducts = new HashMap<Integer, Product>();
+
+    public Product(Integer id, String name, Double price, String description, Category category, String image, String modelObject, String modelTexture, Boolean isArCompatible) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+
+        this.category = category;
+        this.price = price;
+        this.image = image;
+        this.modelObject = modelObject;
+        this.modelTexture = modelTexture;
+        this.isArCompatible = isArCompatible;
+    }
+
     public Product(Integer id, String name, Double price, String description, Category category, String image) {
         this.id = id;
         this.name = name;
@@ -18,6 +32,18 @@ public class Product {
         this.category = category;
         this.price = price;
         this.image = image;
+    }
+
+    public String getModelObject() {
+        return modelObject;
+    }
+
+    public String getModelTexture() {
+        return modelTexture;
+    }
+
+    public Boolean getArCompatible() {
+        return isArCompatible;
     }
 
     public Boolean getSelected() {

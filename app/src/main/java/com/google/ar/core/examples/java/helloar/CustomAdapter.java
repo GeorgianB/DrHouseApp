@@ -32,6 +32,7 @@ public class CustomAdapter extends ArrayAdapter<Product> {
         TextView name;
         TextView price;
         CheckBox checkbox;
+        TextView checkBoxLabel;
     }
 
     public CustomAdapter(ArrayList<Product> data, Context context) {
@@ -61,6 +62,7 @@ public class CustomAdapter extends ArrayAdapter<Product> {
             viewHolder.price = (TextView) convertView.findViewById(R.id.productPrice);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.productImage);
             viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.checkBoxLabel = (TextView) convertView.findViewById(R.id.checkBoxLabel);
 
             result = convertView;
 
@@ -94,6 +96,10 @@ public class CustomAdapter extends ArrayAdapter<Product> {
         viewHolder.price.setText(String.valueOf(dataModel.getPrice()));
         viewHolder.imageView.setImageBitmap(this.getBitmapFromURL(dataModel.getImage()));
         viewHolder.checkbox.setId(dataModel.getId());
+        if(!dataModel.getArCompatible()){
+            viewHolder.checkbox.setVisibility(View.INVISIBLE);
+            viewHolder.checkBoxLabel.setVisibility(View.INVISIBLE);
+        }
         // Return the completed view to render on screen
         return convertView;
     }
