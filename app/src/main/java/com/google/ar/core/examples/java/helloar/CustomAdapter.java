@@ -37,7 +37,7 @@ public class CustomAdapter extends ArrayAdapter<Product> {
     public CustomAdapter(ArrayList<Product> data, Context context) {
         super(context, R.layout.row, data);
         this.dataSet = data;
-        this.mContext=context;
+        this.mContext = context;
 
     }
 
@@ -60,23 +60,31 @@ public class CustomAdapter extends ArrayAdapter<Product> {
             viewHolder.name = (TextView) convertView.findViewById(R.id.productName);
             viewHolder.price = (TextView) convertView.findViewById(R.id.productPrice);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.productImage);
-            viewHolder.checkbox = (CheckBox)convertView.findViewById(R.id.checkBox);
+            viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.checkBox);
 
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            result = convertView;
         }
         convertView.setId(dataModel.getId());
-        viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
                 Product product = dataSet.get(getPosition);
-                selectedProducts.add(product);
+                if (isChecked) {
+                    if (selectedProducts.indexOf(product) == -1) {
+                        selectedProducts.add(product);
+                    }
+                } else {
+                    if (selectedProducts.indexOf(product) != -1) {
+                        selectedProducts.remove(product);
+                    }
+                }
                 product.setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
             }
         });
@@ -101,7 +109,7 @@ public class CustomAdapter extends ArrayAdapter<Product> {
             return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();
-            return BitmapFactory.decodeResource(this.mContext.getResources(),R.mipmap.ic_launcher);
+            return BitmapFactory.decodeResource(this.mContext.getResources(), R.mipmap.ic_launcher);
         }
     }
 }
