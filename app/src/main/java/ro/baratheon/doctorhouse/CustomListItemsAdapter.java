@@ -1,20 +1,16 @@
-package com.google.ar.core.examples.java.helloar;
+package ro.baratheon.doctorhouse;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
-import android.widget.BaseAdapter;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.ar.core.examples.java.helloar.entity.Product;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,12 +18,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ro.baratheon.doctorhouse.entity.Product;
+
 public class CustomListItemsAdapter extends BaseAdapter{
     Context context;
     ArrayList<Product> productsList;
     private static LayoutInflater inflater=null;
     private int selectedListItem = 0;
-    public CustomListItemsAdapter(HelloArActivity mainActivity, ArrayList<Product> products) {
+    public CustomListItemsAdapter(DoctorHouseAr mainActivity, ArrayList<Product> products) {
         productsList = products;
         // TODO Auto-generated constructor stub
         context=mainActivity;
@@ -77,7 +75,7 @@ public class CustomListItemsAdapter extends BaseAdapter{
             public void onClick(View v) {
                 v.setSelected(true);
                 selectedListItem = position;
-                ((HelloArActivity)context).selectItem(position);
+                ((DoctorHouseAr)context).selectItem(position);
 
             }
         });

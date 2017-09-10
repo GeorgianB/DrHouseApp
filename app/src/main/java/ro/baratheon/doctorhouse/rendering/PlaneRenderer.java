@@ -12,13 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.examples.java.helloar.rendering;
-
-import com.google.ar.core.Frame;
-import com.google.ar.core.Plane;
-import com.google.ar.core.Pose;
-import com.google.ar.core.Session;
-import com.google.ar.core.examples.java.helloar.R;
+package ro.baratheon.doctorhouse.rendering;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,6 +21,11 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+
+import com.google.ar.core.Frame;
+import com.google.ar.core.Plane;
+import com.google.ar.core.Pose;
+import com.google.ar.core.Session;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -40,8 +39,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import ro.baratheon.doctorhouse.R;
 
 /**
  * Renders the detected AR planes.
@@ -297,7 +299,7 @@ public class PlaneRenderer {
         float cameraY = cameraPose.ty();
         float cameraZ = cameraPose.tz();
         for (Plane plane : allPlanes) {
-            if (plane.getType() != com.google.ar.core.Plane.Type.HORIZONTAL_UPWARD_FACING ||
+            if (plane.getType() != Plane.Type.HORIZONTAL_UPWARD_FACING ||
                     plane.getTrackingState() != Plane.TrackingState.TRACKING) {
                 continue;
             }

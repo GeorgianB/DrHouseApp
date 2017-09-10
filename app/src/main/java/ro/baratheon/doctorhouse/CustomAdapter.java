@@ -1,4 +1,4 @@
-package com.google.ar.core.examples.java.helloar;
+package ro.baratheon.doctorhouse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,13 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.ar.core.examples.java.helloar.entity.Product;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import ro.baratheon.doctorhouse.entity.Product;
 
 public class CustomAdapter extends ArrayAdapter<Product> {
 

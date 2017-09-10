@@ -14,27 +14,8 @@
  * limitations under the License.
  */
 
-package com.google.ar.core.examples.java.helloar;
+package ro.baratheon.doctorhouse;
 
-import com.google.ar.core.Config;
-import com.google.ar.core.Frame;
-import com.google.ar.core.Frame.TrackingState;
-import com.google.ar.core.HitResult;
-import com.google.ar.core.Plane;
-import com.google.ar.core.PlaneHitResult;
-import com.google.ar.core.Session;
-import com.google.ar.core.examples.java.helloar.entity.Product;
-import com.google.ar.core.examples.java.helloar.rendering.BackgroundRenderer;
-import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer;
-import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer.BlendMode;
-import com.google.ar.core.examples.java.helloar.rendering.PlaneAttachment;
-import com.google.ar.core.examples.java.helloar.rendering.PlaneRenderer;
-import com.google.ar.core.examples.java.helloar.rendering.PointCloudRenderer;
-
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -46,34 +27,44 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.ar.core.Config;
+import com.google.ar.core.Frame;
+import com.google.ar.core.Frame.TrackingState;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.core.PlaneHitResult;
+import com.google.ar.core.Session;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
+
+import ro.baratheon.doctorhouse.rendering.BackgroundRenderer;
+import ro.baratheon.doctorhouse.rendering.ObjectRenderer;
+import ro.baratheon.doctorhouse.rendering.ObjectRenderer.BlendMode;
+import ro.baratheon.doctorhouse.rendering.PlaneAttachment;
+import ro.baratheon.doctorhouse.rendering.PlaneRenderer;
+import ro.baratheon.doctorhouse.rendering.PointCloudRenderer;
 
 /**
  * This is a simple example that shows how to create an augmented reality (AR) application using
  * the ARCore API. The application will display any detected planes and will allow the user to
  * tap on a plane to place a 3d model of the Android robot.
  */
-public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.Renderer {
-    private static final String TAG = HelloArActivity.class.getSimpleName();
+public class DoctorHouseAr extends AppCompatActivity implements GLSurfaceView.Renderer {
+    private static final String TAG = DoctorHouseAr.class.getSimpleName();
 
     // Rendering. The Renderers are created here, and initialized when the GL surface is created.
     private GLSurfaceView mSurfaceView;
@@ -408,7 +399,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
             // Check if we detected at least one plane. If so, hide the loading message.
             if (mLoadingMessageSnackbar != null) {
                 for (Plane plane : mSession.getAllPlanes()) {
-                    if (plane.getType() == com.google.ar.core.Plane.Type.HORIZONTAL_UPWARD_FACING &&
+                    if (plane.getType() == Plane.Type.HORIZONTAL_UPWARD_FACING &&
                             plane.getTrackingState() == Plane.TrackingState.TRACKING) {
                         hideLoadingMessage();
                         break;
@@ -447,7 +438,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
             @Override
             public void run() {
                 mLoadingMessageSnackbar = Snackbar.make(
-                    HelloArActivity.this.findViewById(android.R.id.content),
+                    DoctorHouseAr.this.findViewById(android.R.id.content),
                     "Searching for surfaces...", Snackbar.LENGTH_INDEFINITE);
                 mLoadingMessageSnackbar.getView().setBackgroundColor(0xbf323232);
                 mLoadingMessageSnackbar.show();
