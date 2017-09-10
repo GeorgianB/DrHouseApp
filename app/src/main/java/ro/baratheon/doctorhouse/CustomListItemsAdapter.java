@@ -24,7 +24,7 @@ public class CustomListItemsAdapter extends BaseAdapter{
     Context context;
     ArrayList<Product> productsList;
     private static LayoutInflater inflater=null;
-    private int selectedListItem = 0;
+    private int selectedListItem = -1;
     public CustomListItemsAdapter(DoctorHouseAr mainActivity, ArrayList<Product> products) {
         productsList = products;
         // TODO Auto-generated constructor stub
