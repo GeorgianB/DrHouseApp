@@ -33,6 +33,7 @@ import com.google.ar.core.examples.java.helloar.rendering.PointCloudRenderer;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.opengl.GLES20;
@@ -89,6 +90,8 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     private ScaleGestureDetector mScaleDetector;
     private Snackbar mLoadingMessageSnackbar = null;
     private String mObjectFile;
+    private String mObjectName;
+    private String mObjectTexture;
 
     private ObjectRenderer mVirtualObject = new ObjectRenderer();
     private ObjectRenderer mVirtualObjectShadow = new ObjectRenderer();
@@ -109,9 +112,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPlanetTitles;
-
-    public static int [] prgmImages = {R.drawable.res_1e1a4f6f1bad2a2497396b248924864b_80x80_aiqi,R.drawable.res_6ae95e2f8d6cf125691790544fba578f_80x80_4pjm};
-    public static String [] prgmNameList = {"Iphone 6","Nexus -5"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,6 +285,9 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         }
     }
 
+    /**
+     * @param distX
+     */
     private void rotateObject(float distX) {
         mScrollCoef = (mScrollCoef * 360 * mRotateSpeed + distX) / (360 * mRotateSpeed);
         if(mScrollCoef > 1 || mScrollCoef < -1){
@@ -292,10 +295,16 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         }
     }
 
+    /**
+     * @param distY
+     */
     private void translateObject(float distY) {
         mVerticalDist += distY/mTranslateSpeed;
     }
 
+    /**
+     * @param e
+     */
     private void onSingleTap(MotionEvent e) {
         // Queue tap if there is space. Tap is lost if queue is full.
         mQueuedSingleTaps.offer(e);
@@ -310,7 +319,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSession.setCameraTextureName(mBackgroundRenderer.getTextureId());
 
         // Prepare the other rendering objects.
-        createObject("electric-oven.obj", "microwave.jpg");
         try {
             mPlaneRenderer.createOnGlThread(/*context=*/this, "trigrid.png");
         } catch (IOException e) {
@@ -319,23 +327,22 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mPointCloud.createOnGlThread(/*context=*/this);
     }
 
-    /**
-     *
-     * @param objectName
-     * @param Texture
-     */
-    public void createObject(String objectName,String Texture) {
+    public void createObject() {
+        if(mObjectName == null || mObjectTexture == null) return;
+
         try {
-            mVirtualObject.createOnGlThread(/*context=*/this, objectName, Texture);
+            mVirtualObject.createOnGlThread(this, mObjectName, mObjectTexture);
             mVirtualObject.setMaterialProperties(0.0f, 3.5f, 1.0f, 6.0f);
 
-            mVirtualObjectShadow.createOnGlThread(/*context=*/this,
-                    "andy_shadow.obj", "andy_shadow.png");
+            mVirtualObjectShadow.createOnGlThread(this,"andy_shadow.obj", "andy_shadow.png");
             mVirtualObjectShadow.setBlendMode(BlendMode.Shadow);
             mVirtualObjectShadow.setMaterialProperties(1.0f, 0.0f, 0.0f, 1.0f);
         } catch (IOException e) {
             Log.e(TAG, "Failed to read obj file");
         }
+
+        mObjectName = null;
+        mObjectTexture = null;
     }
 
     @Override
@@ -350,6 +357,8 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
     public void onDrawFrame(GL10 gl) {
         // Clear screen to notify driver it should not load any pixels from previous frame.
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        createObject();
 
         try {
             // Obtain the current frame from ARSession. When the configuration is set to
@@ -492,10 +501,15 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         }
     }
 
+    /**
+     * @param position
+     */
     public void selectItem(int position) {
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(MainActivity.adapter.selectedProducts.get(position).getName());
+        mObjectName = MainActivity.adapter.selectedProducts.get(position).getModelObject();
+        mObjectTexture = MainActivity.adapter.selectedProducts.get(position).getModelTexture();
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
