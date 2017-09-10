@@ -12,22 +12,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.examples.java.helloar.rendering;
-
-import com.google.ar.core.Frame;
-import com.google.ar.core.Session;
-import com.google.ar.core.examples.java.helloar.R;
+package ro.baratheon.doctorhouse.rendering;
 
 import android.content.Context;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
+import com.google.ar.core.Frame;
+import com.google.ar.core.Session;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import ro.baratheon.doctorhouse.R;
 
 /**
  * This class renders the AR background from camera feed. It creates and hosts the texture

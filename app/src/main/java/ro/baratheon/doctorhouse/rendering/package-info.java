@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /**
- * A sample showing how to build an Augmented Reality app using ARCore.
+ * This package contains classes that do the rendering for this example.
  */
-package com.google.ar.core.examples.java.helloar;
+package ro.baratheon.doctorhouse.rendering;

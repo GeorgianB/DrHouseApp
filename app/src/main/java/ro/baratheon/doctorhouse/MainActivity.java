@@ -1,4 +1,4 @@
-package com.google.ar.core.examples.java.helloar;
+package ro.baratheon.doctorhouse;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 
-import com.google.ar.core.examples.java.helloar.adapter.Api;
-import com.google.ar.core.examples.java.helloar.entity.Product;
-
 import java.util.ArrayList;
+
+import ro.baratheon.doctorhouse.adapter.Api;
+import ro.baratheon.doctorhouse.entity.Product;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CustomAdapter(dataModels, getApplicationContext());
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, HelloArActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, DoctorHouseAr.class);
                 MainActivity.this.startActivity(myIntent);
             }
         });

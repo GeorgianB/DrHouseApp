@@ -1,4 +1,4 @@
-package com.google.ar.core.examples.java.helloar.entity;
+package ro.baratheon.doctorhouse.entity;
 
 public class Category {
     private Integer id;
