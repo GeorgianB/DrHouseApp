@@ -316,10 +316,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSession.setCameraTextureName(mBackgroundRenderer.getTextureId());
 
         // Prepare the other rendering objects.
-        if(mObjectFile != null){
-            createObject(false);
-        }
-
         try {
             mPlaneRenderer.createOnGlThread(/*context=*/this, "trigrid.png");
         } catch (IOException e) {
@@ -328,9 +324,16 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mPointCloud.createOnGlThread(/*context=*/this);
     }
 
-    public void createObject(boolean storage) {
+    /**
+     *
+     * @param objectName
+     * @param Texture
+     */
+    public void createObject(String objectName,String Texture) {
+        Log.d("Object name: ", objectName);
+        Log.d("Object texture: ", Texture);
         try {
-            mVirtualObject.createOnGlThread(/*context=*/this, "oven_model1obj.obj", "DB_Apps&Tech_04_13_03.png");
+            mVirtualObject.createOnGlThread(/*context=*/this, objectName, Texture);
             mVirtualObject.setMaterialProperties(0.0f, 3.5f, 1.0f, 6.0f);
 
             mVirtualObjectShadow.createOnGlThread(/*context=*/this,
@@ -527,7 +530,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
         fragment.setArguments(args);
         if(position == 0) {
-            downloadResources("http://cdn.ziwind.com/objects/kitchen/oven_model1-obj/oven_model1obj.obj","oven_model1obj.obj");
+            createObject("kitchen.electric_oven-obj.untitled.obj","kitchen.electric_oven-obj.untitled.mtl");
         }
         FragmentManager fragmentManager = getFragmentManager();
         //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -536,48 +539,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mDrawerList.setItemChecked(position, true);
         setTitle(mPlanetTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
-    }
-
-    public void downloadResources(String url,String filename) {
-        if(!StoragePermissionHelper.hasStoragePermission(this)){
-            StoragePermissionHelper.requestStoragePermission(this);
-        }
-        final String u = url;
-        final String name = filename;
-        new Thread(new Runnable() {
-            String url = u;
-            String filename = name;
-            public void run() {
-                DownloadFiles(url,filename);
-            }
-        }).start();
-    }
-
-    public void DownloadFiles(String url, String filename){
-
-        try {
-            URL u = new URL(url);
-            InputStream is = u.openStream();
-
-            DataInputStream dis = new DataInputStream(is);
-
-            byte[] buffer = new byte[1024];
-            int length;
-            FileOutputStream fos = new FileOutputStream(new File("/sdcard/Download/" + filename));
-            while ((length = dis.read(buffer))>0) {
-                fos.write(buffer, 0, length);
-            }
-
-            mObjectFile = "/sdcard/Download/" + filename;
-            createObject(false);
-        }
-        catch (MalformedURLException mue) {
-            Log.e("SYNC getUpdate", "malformed url error", mue);
-        } catch (IOException ioe) {
-            Log.e("SYNC getUpdate", "io error", ioe);
-        } catch (SecurityException se) {
-            Log.e("SYNC getUpdate", "security error", se);
-        }
     }
 
     @Override
