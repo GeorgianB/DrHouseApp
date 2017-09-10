@@ -34,4 +34,6 @@ dependencies {
     compile (name: 'obj-0.2.1', ext: 'jar')
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.android.support:percent:23.3.0'
 }
