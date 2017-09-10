@@ -23,6 +23,7 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PlaneHitResult;
 import com.google.ar.core.Session;
+import com.google.ar.core.examples.java.helloar.entity.Product;
 import com.google.ar.core.examples.java.helloar.rendering.BackgroundRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.ObjectRenderer.BlendMode;
@@ -30,7 +31,6 @@ import com.google.ar.core.examples.java.helloar.rendering.PlaneAttachment;
 import com.google.ar.core.examples.java.helloar.rendering.PlaneRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.PointCloudRenderer;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -130,7 +130,17 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceview);
 
         mSession = new Session(/*context=*/this);
+        /**
+         * cod de preluat produse
+         */
+        System.out.println("#########Inceput output buton in HelloAr");
+        for (Product c : MainActivity.adapter.selectedProducts) {
+            System.out.println(c.getName());
+        }
 
+        /**
+         * cod de preluat produse
+         */
         // Create default config, check is supported, create session from that config.
         mDefaultConfig = Config.createDefaultConfig();
         if (!mSession.isSupported(mDefaultConfig)) {
