@@ -2,6 +2,7 @@ package com.google.ar.core.examples.java.helloar;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.BaseAdapter;
 import android.content.Context;
@@ -25,6 +26,7 @@ public class CustomListItemsAdapter extends BaseAdapter{
     Context context;
     ArrayList<Product> productsList;
     private static LayoutInflater inflater=null;
+    private int selectedListItem = 0;
     public CustomListItemsAdapter(HelloArActivity mainActivity, ArrayList<Product> products) {
         productsList = products;
         // TODO Auto-generated constructor stub
@@ -63,11 +65,20 @@ public class CustomListItemsAdapter extends BaseAdapter{
         rowView = inflater.inflate(R.layout.items_list, null);
         holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
         holder.img.setImageBitmap(this.getBitmapFromURL(productsList.get(position).getImage()));
+
+        if(position == selectedListItem) {
+            rowView.setBackgroundColor(Color.parseColor("#005eb8"));
+        } else {
+            rowView.setBackgroundColor(0x333333);
+        }
+
         rowView.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HelloArActivity)context).selectItem(position);
                 v.setSelected(true);
+                selectedListItem = position;
+                ((HelloArActivity)context).selectItem(position);
+
             }
         });
 

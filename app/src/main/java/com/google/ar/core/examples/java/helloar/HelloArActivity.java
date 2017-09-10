@@ -108,10 +108,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
-
-    public static int [] prgmImages = {R.drawable.res_1e1a4f6f1bad2a2497396b248924864b_80x80_aiqi,R.drawable.res_6ae95e2f8d6cf125691790544fba578f_80x80_4pjm};
-    public static String [] prgmNameList = {"Iphone 6","Nexus -5"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,17 +117,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceview);
 
         mSession = new Session(/*context=*/this);
-        /**
-         * cod de preluat produse
-         */
-        System.out.println("#########Inceput output buton in HelloAr");
-        for (Product c : MainActivity.adapter.selectedProducts) {
-            System.out.println(c.getName());
-        }
 
-        /**
-         * cod de preluat produse
-         */
         // Create default config, check is supported, create session from that config.
         mDefaultConfig = Config.createDefaultConfig();
         if (!mSession.isSupported(mDefaultConfig)) {
@@ -192,7 +178,6 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -200,8 +185,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // set up custom list items adapter
-
-
+        mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setAdapter(new CustomListItemsAdapter(this, MainActivity.adapter.selectedProducts));
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -473,23 +457,8 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle action buttons
-        switch(item.getItemId()) {
-            case R.id.action_websearch:
-                // create intent to perform web search for this planet
-                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                String url = intent.getExtras().getString("url");
-                Log.d("url", url);
-                // catch event that there's no activity to handle intent
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void selectItem(int position) {
