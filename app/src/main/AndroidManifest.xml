@@ -24,6 +24,7 @@
         android:targetSdkVersion="25" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -37,12 +38,16 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat"
             android:screenOrientation="locked">
+        </activity>
+
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
