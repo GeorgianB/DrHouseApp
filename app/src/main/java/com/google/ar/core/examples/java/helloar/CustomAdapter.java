@@ -1,10 +1,8 @@
 package com.google.ar.core.examples.java.helloar;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CustomAdapter extends ArrayAdapter<Product> {
 
     private ArrayList<Product> dataSet;
-    public ArrayList<Product> caca = new ArrayList<Product>();
+    public ArrayList<Product> selectedProducts = new ArrayList<Product>();
     Context mContext;
 
     // View lookup cache
@@ -79,6 +76,7 @@ public class CustomAdapter extends ArrayAdapter<Product> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
                 Product product = dataSet.get(getPosition);
+                selectedProducts.add(product);
                 product.setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
             }
         });

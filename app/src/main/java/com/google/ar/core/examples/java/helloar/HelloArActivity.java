@@ -31,7 +31,6 @@ import com.google.ar.core.examples.java.helloar.rendering.PlaneAttachment;
 import com.google.ar.core.examples.java.helloar.rendering.PlaneRenderer;
 import com.google.ar.core.examples.java.helloar.rendering.PointCloudRenderer;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
@@ -128,7 +127,7 @@ public class HelloArActivity extends AppCompatActivity implements GLSurfaceView.
          * cod de preluat produse
          */
         System.out.println("#########Inceput output buton in HelloAr");
-        for (Product c : MainActivity.adapter.caca) {
+        for (Product c : MainActivity.adapter.selectedProducts) {
             System.out.println(c.getName());
         }
 
