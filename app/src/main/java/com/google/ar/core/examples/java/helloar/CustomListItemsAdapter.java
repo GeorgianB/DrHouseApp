@@ -1,5 +1,8 @@
 package com.google.ar.core.examples.java.helloar;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.BaseAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,23 +13,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.ar.core.examples.java.helloar.entity.Product;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class CustomListItemsAdapter extends BaseAdapter{
-    String [] result;
     Context context;
-    int [] imageId;
+    ArrayList<Product> productsList;
     private static LayoutInflater inflater=null;
-    public CustomListItemsAdapter(HelloArActivity mainActivity, String[] prgmNameList, int[] prgmImages) {
+    public CustomListItemsAdapter(HelloArActivity mainActivity, ArrayList<Product> products) {
+        productsList = products;
         // TODO Auto-generated constructor stub
-        result=prgmNameList;
         context=mainActivity;
-        imageId=prgmImages;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return result.length;
+        return productsList.size();
     }
 
     @Override
@@ -52,18 +61,31 @@ public class CustomListItemsAdapter extends BaseAdapter{
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.items_list, null);
-        holder.tv=(TextView) rowView.findViewById(R.id.textView1);
         holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
-        holder.tv.setText(result[position]);
-        holder.img.setImageResource(imageId[position]);
+        holder.img.setImageBitmap(this.getBitmapFromURL(productsList.get(position).getImage()));
         rowView.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "hello", Toast.LENGTH_LONG).show();
                 ((HelloArActivity)context).selectItem(position);
+                v.setSelected(true);
             }
         });
 
         return rowView;
+    }
+
+    private Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher);
+        }
     }
 }
