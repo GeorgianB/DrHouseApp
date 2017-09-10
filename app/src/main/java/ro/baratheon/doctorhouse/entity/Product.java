@@ -9,7 +9,7 @@ public class Product {
     private String image;
     private String modelObject;
     private String modelTexture;
-    private Boolean isArCompatible = false;
+    private Boolean isArCompatible;
     private Boolean selected = false;
 
     public Product(Integer id, String name, Double price, String description, Category category, String image, String modelObject, String modelTexture, Boolean isArCompatible) {
@@ -23,15 +23,6 @@ public class Product {
         this.modelObject = modelObject;
         this.modelTexture = modelTexture;
         this.isArCompatible = isArCompatible;
-    }
-
-    public Product(Integer id, String name, Double price, String description, Category category, String image) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.price = price;
-        this.image = image;
     }
 
     public String getModelObject() {

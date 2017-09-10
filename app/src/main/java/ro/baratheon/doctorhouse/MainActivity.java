@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         Api jsonAdapter = new Api("http://api.ziwind.com/app_dev.php/v1/product");
         dataModels = jsonAdapter.getProducts();
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
-
         adapter = new CustomAdapter(dataModels, getApplicationContext());
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
