@@ -12,9 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.examples.java.helloar.rendering;
-
-import com.google.ar.core.examples.java.helloar.R;
+package ro.baratheon.doctorhouse.rendering;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,7 +22,6 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -32,10 +29,12 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+
 import de.javagl.Obj;
 import de.javagl.ObjData;
 import de.javagl.ObjReader;
 import de.javagl.ObjUtils;
+import ro.baratheon.doctorhouse.R;
 
 /**
  * Renders an object loaded from an OBJ file in OpenGL.
@@ -239,7 +238,7 @@ public class ObjectRenderer {
      *
      * @param modelMatrix A 4x4 model-to-world transformation matrix, stored in column-major order.
      * @param scaleFactor A separate scaling factor to apply before the {@code modelMatrix}.
-     * @see android.opengl.Matrix
+     * @see Matrix
      */
     public void updateModelMatrix(float[] modelMatrix, float scaleFactor, float rotationCoef, float verticalDist) {
         float[] scaleMatrix = new float[16];
@@ -288,7 +287,7 @@ public class ObjectRenderer {
      * @see #setBlendMode(BlendMode)
      * @see #updateModelMatrix(float[], float)
      * @see #setMaterialProperties(float, float, float, float)
-     * @see android.opengl.Matrix
+     * @see Matrix
      */
     public void draw(float[] cameraView, float[] cameraPerspective, float lightIntensity) {
 

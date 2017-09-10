@@ -1,7 +1,5 @@
-package com.google.ar.core.examples.java.helloar.adapter;
+package ro.baratheon.doctorhouse.adapter;
 
-import com.google.ar.core.examples.java.helloar.entity.Category;
-import com.google.ar.core.examples.java.helloar.entity.Product;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,6 +10,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import ro.baratheon.doctorhouse.entity.Category;
+import ro.baratheon.doctorhouse.entity.Product;
 
 public class Api {
     private String endPoint;
